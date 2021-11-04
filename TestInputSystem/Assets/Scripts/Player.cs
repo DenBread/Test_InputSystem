@@ -17,6 +17,11 @@ public class Player : MonoBehaviour
         playerController.Player.Jump.performed += context => Jump();
     }
 
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
     private void OnEnable()
     {
         playerController.Enable();
@@ -29,10 +34,18 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (_rb.velocity.magnitude == 0)
+        if (_rb.velocity.y == 0)
         {
             _rb.AddForce(Vector3.up * _force, ForceMode.Impulse);
+            Debug.Log("Jump");
         }
-        Debug.Log("Jump");
+    }
+
+    private void Move()
+    {
+        Debug.Log(playerController.Player.AWSD.ReadValue<Vector2>());
+        Vector2 vec = playerController.Player.AWSD.ReadValue<Vector2>();
+        float speed = 5f;
+        _rb.AddForce(new Vector3(vec.x, 0f, vec.y) * speed, ForceMode.Force);
     }
 }
